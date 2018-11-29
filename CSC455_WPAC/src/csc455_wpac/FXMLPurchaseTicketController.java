@@ -69,7 +69,7 @@ public class FXMLPurchaseTicketController implements Initializable {
     private Button returnToMain;
     
     @FXML
-    private boolean checkAvailability() throws SQLException{
+    private boolean checkAvailability() throws SQLException, Exception{
         return getSpecificSeatAvailability(sec, rowNum, seatNum, eid);
     }
     
@@ -103,7 +103,8 @@ public class FXMLPurchaseTicketController implements Initializable {
         if (goAhead){
             getSeatID();
             getTicketID();
-            CSC455_DatabaseProject.executeMakeTransaction(tid, FXMLDocumentController.customerID);
+            System.out.println(tid);
+            CSC455_DatabaseProject.executeMakeTransaction(tid,FXMLDocumentController.customerID); //executePurchaseTicket(tid, sec, rowNum, seatNum, FXMLDocumentController.customerID);
             ((Node) e.getSource()).getScene().getWindow().hide();
             Parent customer = FXMLLoader.load(getClass().getResource("FXMLTicket.fxml"));
             Stage stage = new Stage();

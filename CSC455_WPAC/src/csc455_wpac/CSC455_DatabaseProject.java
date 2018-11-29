@@ -165,7 +165,30 @@ public class CSC455_DatabaseProject{
         }
     }
     
-    public static boolean getSpecificSeatAvailability(String sid, int rid, int sno, int eid) throws SQLException{
+    public static void executePurchaseTicket(int tid, String sid, int rid, int sno, int cid) throws SQLException, Exception{
+        Connection conn = establish_connection();
+        CallableStatement call = null;
+        try {
+            call = conn.prepareCall("{call purchaseTicket(?,?,?,?,?)}");
+            System.out.println(tid);
+            call.setInt(1, tid);
+            call.setString(2, sid);
+            call.setInt(3, rid);
+            call.setInt(4, sno);
+            call.setInt(5, cid);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while purchasing ticket.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            if (call != null){
+                call.close();
+            }
+            disconnect_connection(conn);
+        }
+    }
+    
+    public static boolean getSpecificSeatAvailability(String sid, int rid, int sno, int eid) throws SQLException, Exception{
         Connection conn = establish_connection();
         PreparedStatement prepared = null;
         boolean result = false;
@@ -184,33 +207,12 @@ public class CSC455_DatabaseProject{
             if (prepared != null){
                 prepared.close();
             }
+            disconnect_connection(conn);
         }
         return result;
     }
     
-    public static void executePurchaseTicket(int tid, int cid, int d, int f, int g) throws SQLException, Exception{
-        Connection conn = establish_connection();
-        CallableStatement call = null;
-        try {
-            call = conn.prepareCall("{call purchaseTicket(?,?,?,?,?)}");
-            call.setInt(1, tid);
-            call.setInt(2, cid);
-            call.setInt(3, d);
-            call.setInt(4, f);
-            call.setInt(5, g);
-            call.execute();
-        } catch (SQLException ex) {
-            System.out.println("Error occured while purchasing ticket.");
-            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            if (call != null){
-                call.close();
-            }
-            disconnect_connection(conn);
-        }
-    }
-    
-    public static ResultSet getSectionAvailability(int id, String sid) throws SQLException{
+    public static ResultSet getSectionAvailability(int id, String sid) throws SQLException, Exception{
         Connection conn = establish_connection();
         PreparedStatement prepared = null;
         ResultSet result = null;
@@ -232,11 +234,12 @@ public class CSC455_DatabaseProject{
             if (prepared != null){
                 prepared.close();
             }
+            disconnect_connection(conn);
         }
         return cached;
     }
     
-    public static ResultSet getRowAvailability(int id, String desiredOutput, String extra) throws SQLException{
+    public static ResultSet getRowAvailability(int id, String desiredOutput, String extra) throws SQLException, Exception{
         Connection conn = establish_connection();
         PreparedStatement prepared = null;
         ResultSet result = null;
@@ -258,6 +261,7 @@ public class CSC455_DatabaseProject{
             if (prepared != null){
                 prepared.close();
             }
+            disconnect_connection(conn);
         }
         return cached;
     }
