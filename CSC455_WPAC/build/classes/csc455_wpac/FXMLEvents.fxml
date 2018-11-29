@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="csc455_wpac.FXMLEventsController">
+   <children>
+      <ScrollPane fx:id="eventsScroller" layoutY="47.0" prefHeight="353.0" prefWidth="700.0">
+         <content>
+            <ListView fx:id="list" prefHeight="360.0" prefWidth="698.0" />
+         </content>
+      </ScrollPane>
+      <Button fx:id="expand" layoutX="609.0" layoutY="349.0" mnemonicParsing="false" onAction="#expandEvent" prefHeight="27.0" prefWidth="67.0" text="Expand" />
+      <AnchorPane fx:id="selectedEvent" layoutY="47.0" prefHeight="353.0" prefWidth="700.0" visible="false">
+         <children>
+            <ImageView fitHeight="328.0" fitWidth="729.0" layoutX="53.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/WPACApril.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="getTickets" layoutX="71.0" layoutY="299.0" mnemonicParsing="false" onAction="#goToSections" text="Get Tickets" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="searchBar" prefHeight="48.0" prefWidth="700.0" style="-fx-background-color: #ba1f1f;">
+         <children>
+            <Button layoutX="617.0" layoutY="11.0" mnemonicParsing="false" onAction="#searchEvents" text="Search" />
+            <Label layoutX="14.0" layoutY="4.0" prefHeight="37.0" prefWidth="74.0" text="Events" textFill="WHITE">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+            <TextField fx:id="searched" layoutX="222.0" layoutY="11.0" prefHeight="27.0" prefWidth="169.0" />
+            <Button blendMode="COLOR_DODGE" layoutY="6.0" mnemonicParsing="false" onAction="#eventsHome" prefHeight="37.0" prefWidth="112.0" style="-fx-background-color: #000000;" />
+            <DatePicker fx:id="searchedDate" layoutX="441.0" layoutY="10.0" prefHeight="27.0" prefWidth="151.0" />
+            <Text layoutX="156.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Keyword:" />
+            <Text layoutX="403.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
