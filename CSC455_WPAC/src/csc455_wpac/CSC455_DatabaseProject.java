@@ -170,7 +170,7 @@ public class CSC455_DatabaseProject{
         PreparedStatement prepared = null;
         boolean result = false;
         try{
-            prepared = conn.prepareStatement("call seatLookup(?,?,?,?)");
+            prepared = conn.prepareStatement("SELECT ENAME, SEC_ID, ROW_ID, SEAT_NUMBER, TAVAILABILITY FROM ( SELECT EVENT_ID, ENAME, TICKET_ID, TSEAT_ID, TAVAILABILITY FROM Event, Ticket where EVENT_ID = TEVENT_ID) x JOIN Seat ON x.TSEAT_ID = SEAT_ID WHERE SEC_ID = ? and ROW_ID = ? and SEAT_NUMBER = ? AND EVENT_ID = ?");
             prepared.setString(1, sid);
             prepared.setInt(2, rid);
             prepared.setInt(3, sno);
@@ -178,7 +178,7 @@ public class CSC455_DatabaseProject{
             result = prepared.execute();
             System.out.println(result);
         } catch(SQLException ex){
-            System.out.println("Error occured while getting section availability.");
+            System.out.println("Error occured while getting specific seat availability.");
             Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
         } finally{
             if (prepared != null){

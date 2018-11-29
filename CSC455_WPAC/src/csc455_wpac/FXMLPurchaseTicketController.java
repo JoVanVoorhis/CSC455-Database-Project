@@ -70,7 +70,6 @@ public class FXMLPurchaseTicketController implements Initializable {
     
     @FXML
     private boolean checkAvailability() throws SQLException{
-        // check to see if seat is still available. call seatLookUp prepared statement.
         return getSpecificSeatAvailability(sec, rowNum, seatNum, eid);
     }
     
