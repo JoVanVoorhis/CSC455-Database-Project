@@ -35,6 +35,20 @@ public class FXMLCustomerController implements Initializable {
     private Pane confirmDelete;
     
     @FXML
+    private void logOutAction(ActionEvent event) throws Exception{
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        URL url = getClass().getResource("FXMLDocument.fxml");
+        if (url == null){
+            System.out.println("Could not return to login.");
+        }
+        Parent root = FXMLLoader.load(url);
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
     private void deleteAccountAction(ActionEvent event){
         confirmDelete.setVisible(true);
     }

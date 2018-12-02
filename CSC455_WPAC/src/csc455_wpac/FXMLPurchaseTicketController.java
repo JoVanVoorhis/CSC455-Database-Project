@@ -108,9 +108,14 @@ public class FXMLPurchaseTicketController implements Initializable {
             System.out.println(tid);
             CSC455_DatabaseProject.executeMakeTransaction(tid,FXMLDocumentController.customerID); //executePurchaseTicket(tid, sec, rowNum, seatNum, FXMLDocumentController.customerID); 
             ((Node) e.getSource()).getScene().getWindow().hide();
-            Parent customer = FXMLLoader.load(getClass().getResource("FXMLTicket.fxml"));
+            URL url = getClass().getResource("FXMLTicket.fxml");
+            if (url == null){
+                System.out.println("Could not display ticket.");
+            }
+            Parent root = FXMLLoader.load(url);
             Stage stage = new Stage();
-            stage.setScene(new Scene(customer));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.show();
         }
         if (!goAhead){

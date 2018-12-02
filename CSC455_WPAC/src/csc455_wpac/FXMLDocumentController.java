@@ -207,15 +207,16 @@ public class FXMLDocumentController implements Initializable {
                 }
                 else {
                     System.out.println("Welcome: " + name);
-                    try{
-                        ((Node) event.getSource()).getScene().getWindow().hide();
-                        Parent admin = FXMLLoader.load(getClass().getResource("FXMLAdmin.fxml"));
-                        Stage stage = new Stage();
-                        stage.setScene(new Scene(admin));
-                        stage.show();
-                    }catch (Exception e){
-                        System.out.println("Cannot load the admin window.");
+                    ((Node) event.getSource()).getScene().getWindow().hide();
+                    URL url = getClass().getResource("FXMLAdmin.fxml");
+                    if (url == null){
+                        System.out.println("Could not go to admin!");
                     }
+                    Parent root = FXMLLoader.load(url);
+                    Stage stage = new Stage();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
                 }
             } catch (Exception ex) {
                 Logger.getLogger(CSC455_WPAC.class.getName()).log(Level.SEVERE, null, ex);
