@@ -1,11 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csc455_wpac.FXMLCustomerController">
-    
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csc455_wpac.FXMLCustomerController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="284.0" style="-fx-background-color: ba1f1f;">
+         <children>
+            <ImageView fitHeight="254.0" fitWidth="318.0" layoutX="-4.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/DPACLogoPNG.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="name" fill="WHITE" layoutX="3.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Last," textAlignment="CENTER" wrappingWidth="304.3479919433594">
+               <font>
+                  <Font name="Avenir Book" size="28.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="94.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+               <font>
+                  <Font name="Avenir Book" size="53.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="57.0" layoutY="361.0" strokeType="OUTSIDE" strokeWidth="0.0" text="welcomes you!">
+               <font>
+                  <Font name="Avenir Book" size="30.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <Rectangle height="400.0" layoutX="309.0" stroke="BLACK" strokeType="INSIDE" width="27.0" />
+      <Accordion layoutX="336.0" prefHeight="400.0" prefWidth="364.0">
+        <panes>
+          <TitledPane animated="false" text="Profile">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="-1.0" layoutY="14.0" mnemonicParsing="false" onAction="#manageProfileAction" prefHeight="88.0" prefWidth="364.0" text="Manage Profile">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="-1.0" layoutY="115.0" mnemonicParsing="false" onAction="#customerEventsAction" prefHeight="83.0" prefWidth="364.0" text="Your Events">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="-1.0" layoutY="212.0" mnemonicParsing="false" onAction="#deleteAccountAction" prefHeight="41.0" prefWidth="364.0" text="Delete Account">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                        <Pane fx:id="confirmDelete" layoutX="54.0" layoutY="33.0" prefHeight="200.0" prefWidth="265.0" style="-fx-background-color: #000000;" visible="false">
+                           <children>
+                              <Text fill="WHITE" layoutX="25.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account?" textAlignment="CENTER" wrappingWidth="215.21875">
+                                 <font>
+                                    <Font name="Avenir Book" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="WHITE" layoutX="44.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="All tickets will be returned.">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Text>
+                              <Button layoutX="25.0" layoutY="140.0" mnemonicParsing="false" onAction="#confirmDeleteAction" text="Delete">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="174.0" layoutY="140.0" mnemonicParsing="false" onAction="#cancelDeleteAction" text="Cancel">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+            </content>
+               <font>
+                  <Font name="Avenir Book" size="20.0" />
+               </font>
+          </TitledPane>
+          <TitledPane animated="false" text="Events">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="-1.0" layoutY="14.0" mnemonicParsing="false" onAction="#eventsCalendarAction" prefHeight="105.0" prefWidth="364.0" text="Events Calendar">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="-1.0" layoutY="137.0" mnemonicParsing="false" onAction="#eventsFindFriendsAction" prefHeight="116.0" prefWidth="364.0" text="Find Events Your Friends are Attending">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+            </content>
+               <font>
+                  <Font name="Avenir Book" size="20.0" />
+               </font>
+          </TitledPane>
+          <TitledPane animated="false" text="Tickets">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="-2.0" layoutY="14.0" mnemonicParsing="false" onAction="#ticketPurchaseAction" prefHeight="114.0" prefWidth="364.0" text="Purchase a Ticket">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="-2.0" layoutY="140.0" mnemonicParsing="false" onAction="#returnTicketAction" prefHeight="114.0" prefWidth="364.0" text="Return a Ticket">
+                           <font>
+                              <Font name="Avenir Book" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+            </content>
+               <font>
+                  <Font name="Avenir Book" size="20.0" />
+               </font>
+          </TitledPane>
+        </panes>
+      </Accordion>
+   </children>
 </AnchorPane>

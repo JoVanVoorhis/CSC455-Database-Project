@@ -37,7 +37,7 @@ import javafx.stage.Stage;
  * @author JordanKayleeVanVoorhis
  */
 public class FXMLDocumentController implements Initializable {
-    
+    static String name = null;
     static int customerID = 0;
     //@FXML
     //private Label label;
@@ -143,8 +143,6 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException{
-        String name = null;
-        String[] user;
         if ("Customer".equals(accountTypeBox.getValue())){
             try {
                 ResultSet result = getResult("SELECT * from Customer");
@@ -172,7 +170,7 @@ public class FXMLDocumentController implements Initializable {
                     System.out.println("Welcome: " + name);
                     try{
                         ((Node) event.getSource()).getScene().getWindow().hide();
-                        Parent customer = FXMLLoader.load(getClass().getResource("FXMLEvents.fxml"));//FXMLCustomer.fxml"));
+                        Parent customer = FXMLLoader.load(getClass().getResource("FXMLCustomer.fxml"));
                         Stage stage = new Stage();
                         stage.setScene(new Scene(customer));
                         stage.show();

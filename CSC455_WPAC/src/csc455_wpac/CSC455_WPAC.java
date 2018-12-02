@@ -27,13 +27,9 @@ public class CSC455_WPAC extends Application {
             System.out.println("Could not load file!");
         }
         Parent root = FXMLLoader.load(url);
-        
         Scene scene = new Scene(root);
-        
         stage.setScene(scene);
         stage.show();
-        
-
     }
 
     /**

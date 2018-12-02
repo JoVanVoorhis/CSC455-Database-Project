@@ -145,17 +145,20 @@ public class CSC455_DatabaseProject{
             disconnect_connection(conn);
         }
     }
-    
-    public static void executeMakeTransaction(int tid, int cid) throws Exception{
+        
+    public static int executeSecPrice(int eid, String sec) throws SQLException, Exception{
         Connection conn = establish_connection();
         CallableStatement call = null;
+        int output = 0;
         try {
-            call = conn.prepareCall("{call makeTransaction(?,?)}");
-            call.setInt(1, tid);
-            call.setInt(2, cid);
+            call = conn.prepareCall("{? = call secPrice(?,?)}");
+            call.registerOutParameter(1, Types.INTEGER);
+            call.setInt(2, eid);
+            call.setString(3, sec);
             call.execute();
+            output = call.getInt(1);
         } catch (SQLException ex) {
-            System.out.println("Error occured while making transaction.");
+            System.out.println("Error occured while getting section price.");
             Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             if (call != null){
@@ -163,19 +166,50 @@ public class CSC455_DatabaseProject{
             }
             disconnect_connection(conn);
         }
+        return output;
     }
     
+    public static void executeDeleteCustomer(int cid) throws Exception{
+        Connection conn = establish_connection();
+        try (CallableStatement call = conn.prepareCall("{call deleteCustomer(?)}")) {
+            call.setInt(1, cid);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while deleting customer.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            disconnect_connection(conn);
+        }
+    }
+    
+    public static void executeMakeTransaction(int tid, int cid) throws Exception{
+        Connection conn = establish_connection();
+        try (CallableStatement call = conn.prepareCall("{call makeTransaction(?,?)}")) {
+            call.setInt(1, tid);
+            call.setInt(2, cid);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while making transaction.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            disconnect_connection(conn);
+        }
+    }
+    
+    @SuppressWarnings({"ConvertToTryWithResources", "null"})
     public static void executePurchaseTicket(int tid, String sid, int rid, int sno, int cid) throws SQLException, Exception{
         Connection conn = establish_connection();
         CallableStatement call = null;
         try {
             call = conn.prepareCall("{call purchaseTicket(?,?,?,?,?)}");
             System.out.println(tid);
+            System.out.println(call.toString());
             call.setInt(1, tid);
             call.setString(2, sid);
             call.setInt(3, rid);
             call.setInt(4, sno);
             call.setInt(5, cid);
+            System.out.println(call.toString());
             call.execute();
         } catch (SQLException ex) {
             System.out.println("Error occured while purchasing ticket.");
