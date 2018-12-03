@@ -15,6 +15,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,8 +71,7 @@ public class FXMLPurchaseTicketController implements Initializable {
     private Button returnToMain;
     
     @FXML
-    private boolean checkAvailability() throws SQLException{
-        // check to see if seat is still available. call seatLookUp prepared statement.
+    private boolean checkAvailability() throws SQLException, Exception{
         return getSpecificSeatAvailability(sec, rowNum, seatNum, eid);
     }
     
@@ -104,11 +105,17 @@ public class FXMLPurchaseTicketController implements Initializable {
         if (goAhead){
             getSeatID();
             getTicketID();
-            CSC455_DatabaseProject.executeMakeTransaction(tid, FXMLDocumentController.customerID);
+            System.out.println(tid);
+            CSC455_DatabaseProject.executeMakeTransaction(tid,FXMLDocumentController.customerID); //executePurchaseTicket(tid, sec, rowNum, seatNum, FXMLDocumentController.customerID); 
             ((Node) e.getSource()).getScene().getWindow().hide();
-            Parent customer = FXMLLoader.load(getClass().getResource("FXMLTicket.fxml"));
+            URL url = getClass().getResource("FXMLTicket.fxml");
+            if (url == null){
+                System.out.println("Could not display ticket.");
+            }
+            Parent root = FXMLLoader.load(url);
             Stage stage = new Stage();
-            stage.setScene(new Scene(customer));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.show();
         }
         if (!goAhead){
@@ -121,17 +128,15 @@ public class FXMLPurchaseTicketController implements Initializable {
     @FXML
     private void returnToMain(ActionEvent event) throws IOException{
         ((Node) event.getSource()).getScene().getWindow().hide();
-        Parent customer = FXMLLoader.load(getClass().getResource("FXMLEvents.fxml"));
+        Parent customer = FXMLLoader.load(getClass().getResource("FXMLCustomerController.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene(customer));
         stage.show();
     }
     
     @FXML
-    private int getPrice(){
-        int secPrice = 0;
-        // call secPrice stored function.
-        return secPrice;
+    private int getPrice() throws Exception{
+        return CSC455_DatabaseProject.executeSecPrice(eid, sec);
     }
     
     /**
@@ -144,7 +149,11 @@ public class FXMLPurchaseTicketController implements Initializable {
         noLongerAvailable.setVisible(false);
         returnToMain.setVisible(false);
         purchaseTicket.setVisible(true);
-        price.setText("Price: " + String.valueOf(getPrice()));
+        try {
+            price.setText("Price: $" + String.valueOf(getPrice()));
+        } catch (Exception ex) {
+            Logger.getLogger(FXMLPurchaseTicketController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         show.setText("Show: " + ename);
         date.setText("Date: " + edate.toLocalDate().format(DateTimeFormatter.ofPattern("MMM d, uuuu")));
         section.setText("Section: " + sec);

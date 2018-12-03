@@ -7,6 +7,7 @@ package csc455_wpac;
 
 import com.sun.rowset.CachedRowSetImpl;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -145,17 +146,20 @@ public class CSC455_DatabaseProject{
             disconnect_connection(conn);
         }
     }
-    
-    public static void executeMakeTransaction(int tid, int cid) throws Exception{
+        
+    public static int executeSecPrice(int eid, String sec) throws SQLException, Exception{
         Connection conn = establish_connection();
         CallableStatement call = null;
+        int output = 0;
         try {
-            call = conn.prepareCall("{call makeTransaction(?,?)}");
-            call.setInt(1, tid);
-            call.setInt(2, cid);
+            call = conn.prepareCall("{? = call secPrice(?,?)}");
+            call.registerOutParameter(1, Types.INTEGER);
+            call.setInt(2, eid);
+            call.setString(3, sec);
             call.execute();
+            output = call.getInt(1);
         } catch (SQLException ex) {
-            System.out.println("Error occured while making transaction.");
+            System.out.println("Error occured while getting section price.");
             Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             if (call != null){
@@ -163,41 +167,64 @@ public class CSC455_DatabaseProject{
             }
             disconnect_connection(conn);
         }
+        return output;
     }
     
-    public static boolean getSpecificSeatAvailability(String sid, int rid, int sno, int eid) throws SQLException{
+    public static void executeCreateEvent(String eName, Date eDate) throws Exception{
         Connection conn = establish_connection();
-        PreparedStatement prepared = null;
-        boolean result = false;
-        try{
-            prepared = conn.prepareStatement("call seatLookup(?,?,?,?)");
-            prepared.setString(1, sid);
-            prepared.setInt(2, rid);
-            prepared.setInt(3, sno);
-            prepared.setInt(4, eid);
-            result = prepared.execute();
-            System.out.println(result);
-        } catch(SQLException ex){
-            System.out.println("Error occured while getting section availability.");
+        try (CallableStatement call = conn.prepareCall("{call createEvent(?,?)}")) {
+            call.setString(1, eName);
+            call.setDate(1, eDate);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while deleting customer.");
             Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-            if (prepared != null){
-                prepared.close();
-            }
+        }finally{
+            disconnect_connection(conn);
         }
-        return result;
     }
     
-    public static void executePurchaseTicket(int tid, int cid, int d, int f, int g) throws SQLException, Exception{
+    public static void executeDeleteCustomer(int cid) throws Exception{
+        Connection conn = establish_connection();
+        try (CallableStatement call = conn.prepareCall("{call deleteCustomer(?)}")) {
+            call.setInt(1, cid);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while deleting customer.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            disconnect_connection(conn);
+        }
+    }
+    
+    public static void executeMakeTransaction(int tid, int cid) throws Exception{
+        Connection conn = establish_connection();
+        try (CallableStatement call = conn.prepareCall("{call makeTransaction(?,?)}")) {
+            call.setInt(1, tid);
+            call.setInt(2, cid);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while making transaction.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            disconnect_connection(conn);
+        }
+    }
+    
+    @SuppressWarnings({"ConvertToTryWithResources", "null"})
+    public static void executePurchaseTicket(int tid, String sid, int rid, int sno, int cid) throws SQLException, Exception{
         Connection conn = establish_connection();
         CallableStatement call = null;
         try {
             call = conn.prepareCall("{call purchaseTicket(?,?,?,?,?)}");
+            System.out.println(tid);
+            System.out.println(call.toString());
             call.setInt(1, tid);
-            call.setInt(2, cid);
-            call.setInt(3, d);
-            call.setInt(4, f);
-            call.setInt(5, g);
+            call.setString(2, sid);
+            call.setInt(3, rid);
+            call.setInt(4, sno);
+            call.setInt(5, cid);
+            System.out.println(call.toString());
             call.execute();
         } catch (SQLException ex) {
             System.out.println("Error occured while purchasing ticket.");
@@ -210,7 +237,31 @@ public class CSC455_DatabaseProject{
         }
     }
     
-    public static ResultSet getSectionAvailability(int id, String sid) throws SQLException{
+    public static boolean getSpecificSeatAvailability(String sid, int rid, int sno, int eid) throws SQLException, Exception{
+        Connection conn = establish_connection();
+        PreparedStatement prepared = null;
+        boolean result = false;
+        try{
+            prepared = conn.prepareStatement("SELECT ENAME, SEC_ID, ROW_ID, SEAT_NUMBER, TAVAILABILITY FROM ( SELECT EVENT_ID, ENAME, TICKET_ID, TSEAT_ID, TAVAILABILITY FROM Event, Ticket where EVENT_ID = TEVENT_ID) x JOIN Seat ON x.TSEAT_ID = SEAT_ID WHERE SEC_ID = ? and ROW_ID = ? and SEAT_NUMBER = ? AND EVENT_ID = ?");
+            prepared.setString(1, sid);
+            prepared.setInt(2, rid);
+            prepared.setInt(3, sno);
+            prepared.setInt(4, eid);
+            result = prepared.execute();
+            System.out.println(result);
+        } catch(SQLException ex){
+            System.out.println("Error occured while getting specific seat availability.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            if (prepared != null){
+                prepared.close();
+            }
+            disconnect_connection(conn);
+        }
+        return result;
+    }
+    
+    public static ResultSet getSectionAvailability(int id, String sid) throws SQLException, Exception{
         Connection conn = establish_connection();
         PreparedStatement prepared = null;
         ResultSet result = null;
@@ -232,11 +283,12 @@ public class CSC455_DatabaseProject{
             if (prepared != null){
                 prepared.close();
             }
+            disconnect_connection(conn);
         }
         return cached;
     }
     
-    public static ResultSet getRowAvailability(int id, String desiredOutput, String extra) throws SQLException{
+    public static ResultSet getRowAvailability(int id, String desiredOutput, String extra) throws SQLException, Exception{
         Connection conn = establish_connection();
         PreparedStatement prepared = null;
         ResultSet result = null;
@@ -258,6 +310,7 @@ public class CSC455_DatabaseProject{
             if (prepared != null){
                 prepared.close();
             }
+            disconnect_connection(conn);
         }
         return cached;
     }

@@ -102,7 +102,7 @@ public class FXMLSeatingController implements Initializable {
     private Label confirmFirst;
 
     @FXML
-    private void selectSection(ActionEvent e) throws SQLException{
+    private void selectSection(ActionEvent e) throws SQLException, Exception{
         Button button = (Button) e.getSource();
         section = button.getId();
         System.out.println(section);
@@ -156,7 +156,7 @@ public class FXMLSeatingController implements Initializable {
     }
     
     @FXML
-    private void setAvailableRows() throws SQLException{
+    private void setAvailableRows() throws SQLException, Exception{
         String getRows = "distinct ROW_ID";
         String specifySection = " and SEC_ID = '" + section + "'";
         ResultSet availableRows = getRowAvailability(eid, getRows, specifySection);
@@ -174,21 +174,21 @@ public class FXMLSeatingController implements Initializable {
     }
     
     @FXML
-    private void initializeRow() throws SQLException{
+    private void initializeRow() throws SQLException, Exception{
         selectRow.setValue(selectRowList.get(0));
         selectRow.setItems(selectRowList);
         initializeSeat();
     }
     
     @FXML
-    private void initializeSeat() throws SQLException{
+    private void initializeSeat() throws SQLException, Exception{
         setAvailableSeats((int) selectRow.getValue());
         selectSeat.setValue(selectSeatList.get(0));
         selectSeat.setItems(selectSeatList);
     }
     
     @FXML
-    private void setAvailableSeats(int currentRow) throws SQLException{
+    private void setAvailableSeats(int currentRow) throws SQLException, Exception{
         String getSeats = "SEAT_NUMBER";
         String specifySection = " and SEC_ID = '" + section + "' and ROW_ID = " + currentRow + ";";
         ResultSet availableRows = getRowAvailability(eid, getSeats, specifySection); // This needs to be changed to a stored event id value.
@@ -205,7 +205,7 @@ public class FXMLSeatingController implements Initializable {
     }
     
     @FXML
-    private void confirmRow(ActionEvent e) throws SQLException{
+    private void confirmRow(ActionEvent e) throws SQLException, Exception{
         confirmFirst.setVisible(false);
         row = (int) selectRow.getValue();
         //System.out.println(row);
