@@ -7,6 +7,7 @@ package csc455_wpac;
 
 import com.sun.rowset.CachedRowSetImpl;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -167,6 +168,20 @@ public class CSC455_DatabaseProject{
             disconnect_connection(conn);
         }
         return output;
+    }
+    
+    public static void executeCreateEvent(String eName, Date eDate) throws Exception{
+        Connection conn = establish_connection();
+        try (CallableStatement call = conn.prepareCall("{call createEvent(?,?)}")) {
+            call.setString(1, eName);
+            call.setDate(1, eDate);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while deleting customer.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            disconnect_connection(conn);
+        }
     }
     
     public static void executeDeleteCustomer(int cid) throws Exception{

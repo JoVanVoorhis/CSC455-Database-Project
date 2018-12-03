@@ -5,10 +5,14 @@
  */
 package csc455_wpac;
 
+import static csc455_wpac.CSC455_DatabaseProject.executeCreateEvent;
 import static csc455_wpac.CSC455_DatabaseProject.getResult;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -35,7 +40,118 @@ public class FXMLAdminController implements Initializable {
     private Text name;
     
     
-    // Manage Events > Delete Events > Delete Customer Pane
+    
+    // Log Out Button on bottom left side.
+    
+    @FXML
+    private void logOutAction(ActionEvent event) throws Exception{
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        URL url = getClass().getResource("FXMLDocument.fxml");
+        if (url == null){
+            System.out.println("Could not return to login.");
+        }
+        Parent root = FXMLLoader.load(url);
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    
+    
+    
+    // Manage Events > Add Event > Add Event Pane
+    
+    int newEventID = 0;
+    
+    @FXML
+    private Pane addEventPane;
+    
+    @FXML
+    private TextField eventName;
+    
+    @FXML
+    private Text didNotEnterName;
+    
+    @FXML
+    private DatePicker eventDate;
+    
+    @FXML
+    private Text didNotEnterDate;
+    
+    @FXML
+    private Text eventDateTaken;
+    
+    @FXML
+    private Pane eventAddedPane;
+    
+    @FXML
+    private Text addedNewEventID;
+    
+    @FXML
+    private Text newEventName;
+    
+    @FXML
+    private Text newEventDate;
+    
+    @FXML
+    private void addEvent(ActionEvent event){
+        didNotEnterName.setVisible(false);
+        didNotEnterDate.setVisible(false);
+        eventDateTaken.setVisible(false);
+        eventAddedPane.setVisible(false);
+        addEventPane.setVisible(true);
+    }
+    
+    @FXML
+    private void cancelAddEventButton(ActionEvent event){
+        addEventPane.setVisible(false);
+    }
+    
+    @FXML
+    private void addEventButton(ActionEvent event) throws Exception{
+        if (eventName != null && eventDate != null){
+            executeCreateEvent(eventName.getText(), Date.valueOf(eventDate.getValue()));
+            ResultSet result = getResult("select EVENT_ID from Event where ENAME = " + eventName.getText() + " and EDATE = " + Date.valueOf(eventDate.getValue()) + ";");
+            ResultSetMetaData md = result.getMetaData();
+            int columns = md.getColumnCount();
+            while (result.next()){
+                for (int i = 0; i <= columns; i++){
+                    newEventID = result.getInt(i);
+                }
+            }
+            if (newEventID == 0){
+                eventDateTaken.setVisible(true);
+            }
+            else{
+                addedNewEventID.setText(String.valueOf(newEventID));
+                newEventName.setText(eventName.getText());
+                newEventDate.setText(eventDate.getValue().format(DateTimeFormatter.ofPattern("MMM d, uuuu")));
+                eventAddedPane.setVisible(true);
+            }
+        }
+        if (eventName == null && eventDate != null){
+            didNotEnterName.setVisible(true);
+            didNotEnterDate.setVisible(false);
+        }
+        if (eventDate == null && eventName != null){
+            didNotEnterDate.setVisible(true);
+            didNotEnterName.setVisible(false);
+        }
+        if (eventName == null && eventDate == null){
+            didNotEnterDate.setVisible(true);
+            didNotEnterName.setVisible(true);
+        }
+    }
+    
+    @FXML
+    private void okayButtonAction(ActionEvent event){
+        eventAddedPane.setVisible(false);
+        addEventPane.setVisible(false);
+    }
+    
+    
+    // Manage Events > Delete Events > Delete Event Pane
     
     @FXML
     private Pane confirmDeleteEvent;
@@ -57,12 +173,16 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void deleteEvent(ActionEvent event){
+        areYouSure.setVisible(false);
+        confirmFirst.setVisible(false);
+        invalidEventID.setVisible(false);
         confirmDeleteEvent.setVisible(true);
     }
     
     @FXML
     private void cancelDeleteEventAction(ActionEvent event){
         confirmDeleteEvent.setVisible(false);
+        
     }
     
     @FXML
@@ -105,6 +225,7 @@ public class FXMLAdminController implements Initializable {
     }
     
     
+    
     // Manage Customers > Delete Customer > Delete Customer Pane
     
     @FXML
@@ -127,6 +248,9 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void deleteCustomer(ActionEvent event){
+        areYouSureDC.setVisible(false);
+        confirmCustomerFirst.setVisible(false);
+        invalidCustomerID.setVisible(false);
         confirmDeleteCustomer.setVisible(true);
     }
     
@@ -172,30 +296,6 @@ public class FXMLAdminController implements Initializable {
         invalidCustomerID.setVisible(false);
         customerIDField.clear();
         confirmDeleteCustomer.setVisible(false);
-    }
-    
-    // Log Out Button on bottom left side.
-    
-    @FXML
-    private void logOutAction(ActionEvent event) throws Exception{
-        ((Node) event.getSource()).getScene().getWindow().hide();
-        URL url = getClass().getResource("FXMLDocument.fxml");
-        if (url == null){
-            System.out.println("Could not return to login.");
-        }
-        Parent root = FXMLLoader.load(url);
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-    
-    // Manage Events > Add Event > Add Event Pane
-    
-    @FXML
-    private void addEvent(ActionEvent event){
-        Stage stage = new Stage();
-        stage.show();
     }
     
     
@@ -251,14 +351,9 @@ public class FXMLAdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         name.setText(FXMLDocumentController.name);
-        areYouSure.setVisible(false);
-        confirmFirst.setVisible(false);
-        invalidEventID.setVisible(false);
         confirmDeleteEvent.setVisible(false);
-        areYouSureDC.setVisible(false);
-        confirmCustomerFirst.setVisible(false);
-        invalidCustomerID.setVisible(false);
         confirmDeleteCustomer.setVisible(false);
+        addEventPane.setVisible(false);
     }    
     
 }

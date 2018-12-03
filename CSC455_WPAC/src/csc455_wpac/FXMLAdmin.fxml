@@ -3,6 +3,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="csc455_wpac.FXMLAdminController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csc455_wpac.FXMLAdminController">
     <stylesheets>
         <URL value="@fxmladmin.css" />
     </stylesheets>
@@ -117,6 +118,71 @@
                                     <Font name="Avenir Book" size="15.0" />
                                  </font>
                               </Button>
+                           </children>
+                        </Pane>
+                        <Pane fx:id="addEventPane" layoutX="49.0" layoutY="5.0" prefHeight="254.0" prefWidth="265.0" style="-fx-background-color: #000000;">
+                           <children>
+                              <Text fill="WHITE" layoutX="25.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Event" textAlignment="CENTER" wrappingWidth="215.21875">
+                                 <font>
+                                    <Font name="Avenir Book" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Button layoutX="25.0" layoutY="202.0" mnemonicParsing="false" onAction="#addEventButton" prefHeight="38.0" prefWidth="65.0" text="Add">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Button>
+                              <TextField fx:id="eventName" layoutX="46.0" layoutY="57.0" promptText="Event Name" />
+                              <Text fx:id="didNotEnterDate" fill="WHITE" layoutX="71.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You must enter a date." textAlignment="CENTER" wrappingWidth="124.60300877690315">
+                                 <font>
+                                    <Font name="Avenir Book" size="10.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="didNotEnterName" fill="WHITE" layoutX="56.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You must enter an event name." textAlignment="CENTER" wrappingWidth="153.99999305605888">
+                                 <font>
+                                    <Font name="Avenir Book" size="10.0" />
+                                 </font>
+                              </Text>
+                              <Button layoutX="176.0" layoutY="202.0" mnemonicParsing="false" onAction="#cancelAddEventButton" prefHeight="38.0" prefWidth="68.0" text="Cancel">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Button>
+                              <DatePicker fx:id="eventDate" layoutX="24.0" layoutY="117.0" promptText="Event Date" />
+                              <Text fx:id="eventDateTaken" fill="WHITE" layoutX="19.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An event is already scheduled for that day." textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Avenir Book" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Pane fx:id="eventAddedPane" layoutX="13.0" layoutY="10.0" prefHeight="235.0" prefWidth="240.0" style="-fx-background-color: #ffffff;">
+                                 <children>
+                                    <Text layoutX="20.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Successfully added the new event.">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="addedNewEventID" layoutX="40.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event ID" textAlignment="CENTER" wrappingWidth="160.07000732421875">
+                                       <font>
+                                          <Font name="Avenir Book" size="35.0" />
+                                       </font>
+                                    </Text>
+                                    <Button layoutX="90.0" layoutY="190.0" mnemonicParsing="false" onAction="#okayButtonAction" text="Okay">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Button>
+                                    <Text fx:id="newEventName" layoutX="78.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="newEventDate" layoutX="81.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Date" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </Pane>
                            </children>
                         </Pane>
                      </children>
