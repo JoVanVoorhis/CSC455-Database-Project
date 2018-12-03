@@ -6,6 +6,7 @@
 package csc455_wpac;
 
 import static csc455_wpac.CSC455_DatabaseProject.executeCreateEvent;
+import static csc455_wpac.CSC455_DatabaseProject.executeQuery;
 import static csc455_wpac.CSC455_DatabaseProject.getResult;
 import java.net.URL;
 import java.sql.Date;
@@ -62,8 +63,6 @@ public class FXMLAdminController implements Initializable {
     
     // Manage Events > Add Event > Add Event Pane
     
-    int newEventID = 0;
-    
     @FXML
     private Pane addEventPane;
     
@@ -96,6 +95,7 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void addEvent(ActionEvent event){
+        eventName.clear();
         didNotEnterName.setVisible(false);
         didNotEnterDate.setVisible(false);
         eventDateTaken.setVisible(false);
@@ -111,6 +111,9 @@ public class FXMLAdminController implements Initializable {
     @FXML
     private void addEventButton(ActionEvent event) throws Exception{
         if (eventName != null && eventDate != null){
+            int newEventID = 0;
+            didNotEnterName.setVisible(false);
+            didNotEnterDate.setVisible(false);
             executeCreateEvent(eventName.getText(), Date.valueOf(eventDate.getValue()));
             ResultSet result = getResult("select EVENT_ID from Event where ENAME = " + eventName.getText() + " and EDATE = " + Date.valueOf(eventDate.getValue()) + ";");
             ResultSetMetaData md = result.getMetaData();
@@ -148,6 +151,126 @@ public class FXMLAdminController implements Initializable {
     private void okayButtonAction(ActionEvent event){
         eventAddedPane.setVisible(false);
         addEventPane.setVisible(false);
+    }
+        
+    
+    // Manage Events > Move Event > Move Event Pane
+    
+    @FXML
+    private Pane moveEventPane;
+    
+    @FXML
+    private Pane eventMovedPane;
+    
+    @FXML
+    private TextField moveEventID;
+    
+    @FXML
+    private Text mustEnterID;
+    
+    @FXML
+    private DatePicker moveToDate;
+    
+    @FXML
+    private Text mustEnterDate;
+    
+    @FXML
+    private Text eventAlreadyScheduled;
+    
+    @FXML
+    private Text movedEventID;
+    
+    @FXML
+    private Text movedEventName;
+    
+    @FXML
+    private Text movedEventDate;
+    
+    @FXML
+    private Text enteredInvalidEventID;
+    
+    @FXML
+    private void moveEvent(ActionEvent event){
+        moveEventID.clear();
+        enteredInvalidEventID.setVisible(false);
+        mustEnterID.setVisible(false);
+        mustEnterDate.setVisible(false);
+        eventAlreadyScheduled.setVisible(false);
+        moveEventPane.setVisible(true);
+    }
+    
+    @FXML
+    private void cancelMoveEventButton(ActionEvent event){
+        moveEventPane.setVisible(false);
+    }
+    
+    @FXML
+    private void moveEventButton(ActionEvent event) throws Exception{
+        if (moveEventID != null && moveToDate != null){
+            String moveEventName = null;
+            boolean validID = false;
+            ResultSet eids = getResult("select EVENT_ID from Event;");
+            ResultSetMetaData md1 = eids.getMetaData();
+            int columns1 = md1.getColumnCount();
+            while (eids.next()){
+                for (int i = 0; i <= columns1; i++){
+                    if (Integer.valueOf(moveEventID.getText()) == eids.getInt(i)){
+                        validID = true;
+                        break;
+                    }
+                }
+            }
+            if (validID == true){
+                executeQuery("UPDATE Event SET EDATE = " + Date.valueOf(moveToDate.getValue()) + "WHERE EVENT_ID = " + Integer.valueOf(moveEventID.getText()) + ";");
+                ResultSet result = getResult("select ENAME from Event where EVENT_ID = " + Integer.valueOf(moveEventID.getText()) + " and EDATE = " + Date.valueOf(moveToDate.getValue()) + ";");
+                ResultSetMetaData md = result.getMetaData();
+                int columns = md.getColumnCount();
+                while (result.next()){
+                    for (int i = 0; i <= columns; i++){
+                        moveEventName = result.getString(i);
+                    }
+                }
+                if (moveEventName == null){
+                    eventDateTaken.setVisible(true);
+                }
+                else{
+                    movedEventID.setText(String.valueOf(moveEventID.getText()));
+                    movedEventName.setText(moveEventName);
+                    movedEventDate.setText(moveToDate.getValue().format(DateTimeFormatter.ofPattern("MMM d, uuuu")));
+                    eventMovedPane.setVisible(true);
+                }
+            }
+            else{
+                enteredInvalidEventID.setVisible(true);
+            }
+        }
+        if (moveEventID == null && moveToDate != null){
+            mustEnterID.setVisible(true);
+            mustEnterDate.setVisible(false);
+        }
+        if (moveToDate == null && moveEventID != null){
+            mustEnterDate.setVisible(true);
+            mustEnterID.setVisible(false);
+        }
+        if (moveEventID == null && moveToDate == null){
+            mustEnterID.setVisible(true);
+            mustEnterDate.setVisible(true);
+        }
+    }
+    
+    @FXML
+    private void okayedMoveButton(ActionEvent event){
+        eventMovedPane.setVisible(false);
+        addEventPane.setVisible(false);
+    }
+    
+    
+    // Manage Events > Move Event > Update Ticket Prices Class
+    
+    @FXML
+    private void updateTicketPrices(ActionEvent event){
+        Stage stage = new Stage();
+        stage.show();
     }
     
     
@@ -296,24 +419,6 @@ public class FXMLAdminController implements Initializable {
         invalidCustomerID.setVisible(false);
         customerIDField.clear();
         confirmDeleteCustomer.setVisible(false);
-    }
-    
-    
-    // Manage Events > Move Event > Move Event Pane
-    
-    @FXML
-    private void moveEvent(ActionEvent event){
-        Stage stage = new Stage();
-        stage.show();
-    }
-    
-    
-    // Manage Events > Move Event > Move Event Pane
-    
-    @FXML
-    private void updateTicketPrices(ActionEvent event){
-        Stage stage = new Stage();
-        stage.show();
     }
     
     

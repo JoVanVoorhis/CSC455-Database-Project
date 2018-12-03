@@ -120,7 +120,7 @@
                               </Button>
                            </children>
                         </Pane>
-                        <Pane fx:id="addEventPane" layoutX="49.0" layoutY="5.0" prefHeight="254.0" prefWidth="265.0" style="-fx-background-color: #000000;">
+                        <Pane fx:id="addEventPane" layoutX="49.0" layoutY="5.0" prefHeight="254.0" prefWidth="265.0" style="-fx-background-color: #000000;" visible="false">
                            <children>
                               <Text fill="WHITE" layoutX="25.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Event" textAlignment="CENTER" wrappingWidth="215.21875">
                                  <font>
@@ -154,7 +154,7 @@
                                     <Font name="Avenir Book" size="12.0" />
                                  </font>
                               </Text>
-                              <Pane fx:id="eventAddedPane" layoutX="13.0" layoutY="10.0" prefHeight="235.0" prefWidth="240.0" style="-fx-background-color: #ffffff;">
+                              <Pane fx:id="eventAddedPane" layoutX="13.0" layoutY="10.0" prefHeight="235.0" prefWidth="240.0" style="-fx-background-color: #ffffff;" visible="false">
                                  <children>
                                     <Text layoutX="20.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Successfully added the new event.">
                                        <font>
@@ -183,6 +183,76 @@
                                     </Text>
                                  </children>
                               </Pane>
+                           </children>
+                        </Pane>
+                        <Pane fx:id="addEventPane1" layoutX="49.0" layoutY="10.0" prefHeight="254.0" prefWidth="265.0" style="-fx-background-color: #000000;">
+                           <children>
+                              <Text fill="WHITE" layoutX="25.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Move Event" textAlignment="CENTER" wrappingWidth="215.21875">
+                                 <font>
+                                    <Font name="Avenir Book" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Button layoutX="25.0" layoutY="202.0" mnemonicParsing="false" onAction="#moveEventButton" prefHeight="38.0" prefWidth="65.0" text="Move">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Button>
+                              <TextField fx:id="moveEventID" layoutX="46.0" layoutY="37.0" promptText="Event ID" />
+                              <Text fx:id="mustEnterDate" fill="WHITE" layoutX="71.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You must enter a date." textAlignment="CENTER" wrappingWidth="124.60300877690315">
+                                 <font>
+                                    <Font name="Avenir Book" size="10.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="mustEnterID" fill="WHITE" layoutX="56.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You must enter an event ID." textAlignment="CENTER" wrappingWidth="153.99999305605888">
+                                 <font>
+                                    <Font name="Avenir Book" size="10.0" />
+                                 </font>
+                              </Text>
+                              <Button layoutX="176.0" layoutY="202.0" mnemonicParsing="false" onAction="#cancelMoveEventButton" prefHeight="38.0" prefWidth="68.0" text="Cancel">
+                                 <font>
+                                    <Font name="Avenir Book" size="15.0" />
+                                 </font>
+                              </Button>
+                              <DatePicker fx:id="moveToDate" layoutX="24.0" layoutY="97.0" promptText="Move to Date" />
+                              <Text fx:id="eventAlreadyScheduled" fill="WHITE" layoutX="14.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An event is already scheduled for that day. " textAlignment="CENTER" wrappingWidth="237.63592529296875">
+                                 <font>
+                                    <Font name="Avenir Book" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Pane fx:id="eventMovedPane" layoutX="13.0" layoutY="10.0" prefHeight="235.0" prefWidth="240.0" style="-fx-background-color: #ffffff;">
+                                 <children>
+                                    <Text layoutX="33.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Successfully moved the event.">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="movedEventID" layoutX="34.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event ID" textAlignment="CENTER" wrappingWidth="160.07000732421875">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Text>
+                                    <Button layoutX="90.0" layoutY="190.0" mnemonicParsing="false" onAction="#okayedMoveButton" text="Okay">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Button>
+                                    <Text fx:id="movedEventName" layoutX="78.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Name" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Avenir Book" size="13.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="movedEventDate" layoutX="29.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Event Date" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Avenir Book" size="25.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </Pane>
+                              <Text fx:id="enteredInvalidEventID" fill="WHITE" layoutX="14.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You entered an invalid event ID." textAlignment="CENTER" wrappingWidth="237.63592529296875">
+                                 <font>
+                                    <Font name="Avenir Book" size="12.0" />
+                                 </font>
+                              </Text>
                            </children>
                         </Pane>
                      </children>
