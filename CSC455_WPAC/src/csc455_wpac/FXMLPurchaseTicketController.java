@@ -7,6 +7,7 @@ package csc455_wpac;
 
 import static csc455_wpac.CSC455_DatabaseProject.getResult;
 import static csc455_wpac.CSC455_DatabaseProject.getSpecificSeatAvailability;
+import static csc455_wpac.FXMLSeatingController.row;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -34,14 +35,54 @@ import javafx.stage.Stage;
  * @author JordanKayleeVanVoorhis
  */
 public class FXMLPurchaseTicketController implements Initializable {
+    int eid = FXMLDocumentController.customerID;
     int tid = 0;
     int sid = 0;
-    int eid = FXMLEventsController.eid;
-    int rowNum = FXMLSeatingController.row;
-    int seatNum = FXMLSeatingController.seat;
-    String sec = FXMLSeatingController.section;
-    String ename = FXMLSeatingController.ename;
-    Date edate = FXMLSeatingController.edate;
+    static int rowNum;
+    static int seatNum;
+    static String sec;
+    static String ename;
+    static Date edate;
+    
+    public static void setRowNum(int num){
+        rowNum = num;
+    }
+    
+    public static void setSeatNum(int num){
+        seatNum = num;
+    }
+    
+    public static void setSec(String id){
+        sec = id;
+    }
+    
+    public static void setEname(String name){
+        ename = name;
+    }
+    
+    public static void setEdate(Date date){
+        edate = date;
+    }
+    
+    public static int getRowNum(){
+        return rowNum;
+    }
+    
+    public static int getSeatNum(){
+        return seatNum;
+    }
+    
+    public static String getSec(){
+        return sec;
+    }
+    
+    public static String getEname(){
+        return ename;
+    }
+    
+    public static Date getEdate(){
+        return edate;
+    }
 
     @FXML
     private Text price;
@@ -105,6 +146,12 @@ public class FXMLPurchaseTicketController implements Initializable {
         if (goAhead){
             getSeatID();
             getTicketID();
+            FXMLTicketController.setTID(tid);
+            FXMLTicketController.setRowNum(rowNum);
+            FXMLTicketController.setSeatNum(seatNum);
+            FXMLTicketController.setSec(sec);
+            FXMLTicketController.setEname(ename);
+            FXMLTicketController.setEdate(edate);
             System.out.println(tid);
             CSC455_DatabaseProject.executeMakeTransaction(tid,FXMLDocumentController.customerID); //executePurchaseTicket(tid, sec, rowNum, seatNum, FXMLDocumentController.customerID); 
             ((Node) e.getSource()).getScene().getWindow().hide();

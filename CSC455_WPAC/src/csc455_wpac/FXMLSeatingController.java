@@ -77,12 +77,6 @@ public class FXMLSeatingController implements Initializable {
     @FXML
     private AnchorPane sections;
     
-//    @FXML
-//    private AnchorPane sectionE;
-//    
-//    @FXML
-//    private AnchorPane sectionG;
-    
     @FXML
     private AnchorPane standardSection;
         
@@ -120,15 +114,7 @@ public class FXMLSeatingController implements Initializable {
         }
         else{
             sections.setVisible(false);
-            //if (section == "E"){
-            //    sectionE.setVisible(true);
-            //}
-            //else if (section == "G"){
-            //    sectionG.setVisible(true);
-            //}
-            //else{
-                standardSection.setVisible(true);
-            //}
+            standardSection.setVisible(true);
             sectionLetter.setText(section);
             sideSelection.setVisible(true);
             try {
@@ -165,10 +151,8 @@ public class FXMLSeatingController implements Initializable {
         selectRowList.clear();
         while (availableRows.next()){
             for (int i = 1; i <= columns; i++){
-                //System.out.print(selectRowList.toString());
                 selectRowList.add(availableRows.getInt(i));
             }
-            //System.out.println("");
         }
         initializeRow();
     }
@@ -197,10 +181,8 @@ public class FXMLSeatingController implements Initializable {
         selectSeatList.clear();
         while (availableRows.next()){
             for (int i = 1; i <= columns; i++){
-                //System.out.print(availableRows.getInt(i) + " ");
                 selectSeatList.add(availableRows.getInt(i));
             }
-            //System.out.println("");
         }
     }
     
@@ -218,7 +200,11 @@ public class FXMLSeatingController implements Initializable {
             confirmFirst.setVisible(true);
         }
         else{
-            seat = (int) selectSeat.getValue();
+            FXMLPurchaseTicketController.setRowNum(row);
+            FXMLPurchaseTicketController.setSeatNum((int) selectSeat.getValue());
+            FXMLPurchaseTicketController.setSec(section);
+            FXMLPurchaseTicketController.setEname(ename);
+            FXMLPurchaseTicketController.setEdate(edate);
             ((Node) e.getSource()).getScene().getWindow().hide();
             Parent ticket = FXMLLoader.load(getClass().getResource("FXMLPurchaseTicket.fxml"));
             Stage stage = new Stage();

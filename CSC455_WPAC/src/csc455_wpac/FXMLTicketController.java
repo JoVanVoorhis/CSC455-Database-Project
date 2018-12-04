@@ -19,13 +19,61 @@ import javafx.scene.text.*;
  * @author JordanKayleeVanVoorhis
  */
 public class FXMLTicketController implements Initializable {
-    int tid = 0;
-    int eid = FXMLEventsController.eid;
-    int rowNum = FXMLSeatingController.row;
-    int seatNum = FXMLSeatingController.seat;
-    String sec = FXMLSeatingController.section;
-    String ename = FXMLSeatingController.ename;
-    Date edate = FXMLSeatingController.edate;
+    int eid = FXMLDocumentController.customerID;
+    static int tid;
+    static int rowNum;
+    static int seatNum;
+    static String sec;
+    static String ename;
+    static Date edate;
+    
+    public static void setTID(int id){
+        tid = id;
+    }
+    
+    public static void setRowNum(int num){
+        rowNum = num;
+    }
+    
+    public static void setSeatNum(int num){
+        seatNum = num;
+    }
+    
+    public static void setSec(String id){
+        sec = id;
+    }
+    
+    public static void setEname(String name){
+        ename = name;
+    }
+    
+    public static void setEdate(Date date){
+        edate = date;
+    }
+    
+    public static int getTID(){
+        return tid;
+    }
+    
+    public static int getRowNum(){
+        return rowNum;
+    }
+    
+    public static int getSeatNum(){
+        return seatNum;
+    }
+    
+    public static String getSec(){
+        return sec;
+    }
+    
+    public static String getEname(){
+        return ename;
+    }
+    
+    public static Date getEdate(){
+        return edate;
+    }
 
     @FXML
     private Text barCode;
