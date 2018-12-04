@@ -5,6 +5,7 @@
  */
 package csc455_wpac;
 
+import static csc455_wpac.CSC455_DatabaseProject.executeChangeEventDate;
 import static csc455_wpac.CSC455_DatabaseProject.executeCreateEvent;
 import static csc455_wpac.CSC455_DatabaseProject.executeQuery;
 import static csc455_wpac.CSC455_DatabaseProject.getResult;
@@ -110,16 +111,28 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void addEventButton(ActionEvent event) throws Exception{
-        if (eventName != null && eventDate != null){
+        if ((eventName.getText() == null || eventName.getText().trim().isEmpty()) && eventDate.getValue() == null){
+            didNotEnterDate.setVisible(true);
+            didNotEnterName.setVisible(true);
+        }
+        else if ((eventName.getText() == null || eventName.getText().trim().isEmpty()) && eventDate.getValue() != null){
+            didNotEnterName.setVisible(true);
+            didNotEnterDate.setVisible(false);
+        }
+        else if (eventDate.getValue() == null && eventName.getText() != null){
+            didNotEnterDate.setVisible(true);
+            didNotEnterName.setVisible(false);
+        }
+        else if (eventName.getText() != null && eventDate.getValue() != null){
             int newEventID = 0;
             didNotEnterName.setVisible(false);
             didNotEnterDate.setVisible(false);
             executeCreateEvent(eventName.getText(), Date.valueOf(eventDate.getValue()));
-            ResultSet result = getResult("select EVENT_ID from Event where ENAME = " + eventName.getText() + " and EDATE = " + Date.valueOf(eventDate.getValue()) + ";");
+            ResultSet result = getResult("SELECT EVENT_ID from Event WHERE ENAME = '" + eventName.getText() + "' AND EDATE = '" + Date.valueOf(eventDate.getValue()) + "';");
             ResultSetMetaData md = result.getMetaData();
             int columns = md.getColumnCount();
             while (result.next()){
-                for (int i = 0; i <= columns; i++){
+                for (int i = 1; i <= columns; i++){
                     newEventID = result.getInt(i);
                 }
             }
@@ -127,23 +140,13 @@ public class FXMLAdminController implements Initializable {
                 eventDateTaken.setVisible(true);
             }
             else{
+                eventDateTaken.setVisible(false);
+                eventAddedPane.setVisible(true);
                 addedNewEventID.setText(String.valueOf(newEventID));
                 newEventName.setText(eventName.getText());
                 newEventDate.setText(eventDate.getValue().format(DateTimeFormatter.ofPattern("MMM d, uuuu")));
-                eventAddedPane.setVisible(true);
+                
             }
-        }
-        if (eventName == null && eventDate != null){
-            didNotEnterName.setVisible(true);
-            didNotEnterDate.setVisible(false);
-        }
-        if (eventDate == null && eventName != null){
-            didNotEnterDate.setVisible(true);
-            didNotEnterName.setVisible(false);
-        }
-        if (eventName == null && eventDate == null){
-            didNotEnterDate.setVisible(true);
-            didNotEnterName.setVisible(true);
         }
     }
     
@@ -192,6 +195,7 @@ public class FXMLAdminController implements Initializable {
     @FXML
     private void moveEvent(ActionEvent event){
         moveEventID.clear();
+        eventMovedPane.setVisible(false);
         enteredInvalidEventID.setVisible(false);
         mustEnterID.setVisible(false);
         mustEnterDate.setVisible(false);
@@ -206,62 +210,64 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void moveEventButton(ActionEvent event) throws Exception{
-        if (moveEventID != null && moveToDate != null){
-            String moveEventName = null;
+        if ((moveEventID.getText() == null || moveEventID.getText().trim().isEmpty()) && moveToDate.getValue() == null){
+            mustEnterID.setVisible(true);
+            mustEnterDate.setVisible(true);
+        }
+        else if ((moveEventID.getText() == null || moveEventID.getText().trim().isEmpty()) && moveToDate.getValue() != null){
+            mustEnterID.setVisible(true);
+            mustEnterDate.setVisible(false);
+        }
+        else if (moveToDate.getValue() == null && moveEventID.getText() != null){
+            mustEnterDate.setVisible(true);
+            mustEnterID.setVisible(false);
+        }
+        else{
             boolean validID = false;
             ResultSet eids = getResult("select EVENT_ID from Event;");
             ResultSetMetaData md1 = eids.getMetaData();
             int columns1 = md1.getColumnCount();
             while (eids.next()){
                 for (int i = 0; i <= columns1; i++){
-                    if (Integer.valueOf(moveEventID.getText()) == eids.getInt(i)){
+                    if (i == 1 && Integer.valueOf(moveEventID.getText()) == eids.getInt(i)){
                         validID = true;
                         break;
                     }
                 }
             }
             if (validID == true){
-                executeQuery("UPDATE Event SET EDATE = " + Date.valueOf(moveToDate.getValue()) + "WHERE EVENT_ID = " + Integer.valueOf(moveEventID.getText()) + ";");
-                ResultSet result = getResult("select ENAME from Event where EVENT_ID = " + Integer.valueOf(moveEventID.getText()) + " and EDATE = " + Date.valueOf(moveToDate.getValue()) + ";");
+                String moveEventName = null;
+                executeChangeEventDate(Date.valueOf(moveToDate.getValue()),Integer.valueOf(moveEventID.getText()));
+                ResultSet result = getResult("SELECT ENAME from Event WHERE EVENT_ID = " + Integer.valueOf(moveEventID.getText()) + " AND EDATE = '" + Date.valueOf(moveToDate.getValue()) + "';");
                 ResultSetMetaData md = result.getMetaData();
                 int columns = md.getColumnCount();
                 while (result.next()){
-                    for (int i = 0; i <= columns; i++){
+                    for (int i = 1; i <= columns; i++){
                         moveEventName = result.getString(i);
+                        System.out.println(moveEventName);
                     }
                 }
                 if (moveEventName == null){
-                    eventDateTaken.setVisible(true);
+                    eventAlreadyScheduled.setVisible(true);
                 }
                 else{
+                    eventMovedPane.setVisible(true);
                     movedEventID.setText(String.valueOf(moveEventID.getText()));
                     movedEventName.setText(moveEventName);
                     movedEventDate.setText(moveToDate.getValue().format(DateTimeFormatter.ofPattern("MMM d, uuuu")));
-                    eventMovedPane.setVisible(true);
+                    
                 }
             }
             else{
                 enteredInvalidEventID.setVisible(true);
             }
         }
-        if (moveEventID == null && moveToDate != null){
-            mustEnterID.setVisible(true);
-            mustEnterDate.setVisible(false);
-        }
-        if (moveToDate == null && moveEventID != null){
-            mustEnterDate.setVisible(true);
-            mustEnterID.setVisible(false);
-        }
-        if (moveEventID == null && moveToDate == null){
-            mustEnterID.setVisible(true);
-            mustEnterDate.setVisible(true);
-        }
     }
     
     @FXML
     private void okayedMoveButton(ActionEvent event){
         eventMovedPane.setVisible(false);
-        addEventPane.setVisible(false);
+        moveEventPane.setVisible(false);
     }
     
     
@@ -296,6 +302,7 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void deleteEvent(ActionEvent event){
+        eventTitle.setVisible(false);
         areYouSure.setVisible(false);
         confirmFirst.setVisible(false);
         invalidEventID.setVisible(false);
@@ -310,7 +317,7 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void confirmButtonAction(ActionEvent event) throws Exception{
-        if (eventIDField != null){
+        if (eventIDField.getText() != null && !eventIDField.getText().trim().isEmpty()){
             String eventName = null;
             eventID = Integer.valueOf(eventIDField.getText());
             ResultSet result = getResult("SELECT EVENT_ID, ENAME from Event");
@@ -318,7 +325,7 @@ public class FXMLAdminController implements Initializable {
             int columns = md.getColumnCount();
             while (result.next()){
                 for (int i = 1; i <= columns; i++){
-                    if (result.getInt(i) == eventID){
+                    if (i == 1 && result.getInt(i) == eventID){
                         invalidEventID.setVisible(false);
                         eventName = result.getString(2);
                         break;
@@ -339,7 +346,7 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void confirmDeleteEventAction(ActionEvent event) throws Exception{
-        CSC455_DatabaseProject.executeQuery("DELETE FROM Event WHERE EVENT_ID = " + eventID + ";");
+        CSC455_DatabaseProject.executeDeleteEvent(eventID);
         areYouSure.setVisible(false);
         eventTitle.setVisible(false);
         invalidEventID.setVisible(false);
@@ -392,7 +399,7 @@ public class FXMLAdminController implements Initializable {
             int columns = md.getColumnCount();
             while (result.next()){
                 for (int i = 1; i <= columns; i++){
-                    if (result.getInt(i) == customerID){
+                    if (i == 1 && result.getInt(i) == customerID) {
                         invalidCustomerID.setVisible(false);
                         customerFullName = result.getString(2) + " " + result.getString(3);
                         break;
@@ -413,7 +420,7 @@ public class FXMLAdminController implements Initializable {
     
     @FXML
     private void confirmDeleteCustomerAction(ActionEvent event) throws Exception{
-        CSC455_DatabaseProject.executeQuery("DELETE FROM Customer WHERE CUSTOMER_ID = " + customerID + ";");
+        CSC455_DatabaseProject.executeDeleteCustomer(customerID);
         areYouSureDC.setVisible(false);
         customerName.setVisible(false);
         invalidCustomerID.setVisible(false);
@@ -456,6 +463,12 @@ public class FXMLAdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         name.setText(FXMLDocumentController.name);
+        moveEventPane.setVisible(false);
+        invalidEventID.setVisible(false);
+        eventAlreadyScheduled.setVisible(false);
+        mustEnterID.setVisible(false);
+        mustEnterDate.setVisible(false);
+        customerName.setVisible(false);
         confirmDeleteEvent.setVisible(false);
         confirmDeleteCustomer.setVisible(false);
         addEventPane.setVisible(false);

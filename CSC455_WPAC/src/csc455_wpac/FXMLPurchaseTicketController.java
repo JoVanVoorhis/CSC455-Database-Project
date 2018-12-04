@@ -35,14 +35,19 @@ import javafx.stage.Stage;
  * @author JordanKayleeVanVoorhis
  */
 public class FXMLPurchaseTicketController implements Initializable {
-    int eid = FXMLDocumentController.customerID;
+    
     int tid = 0;
     int sid = 0;
+    static int eid;
     static int rowNum;
     static int seatNum;
     static String sec;
     static String ename;
     static Date edate;
+    
+    public static void setEID(int id){
+        eid = id;
+    }
     
     public static void setRowNum(int num){
         rowNum = num;
@@ -62,6 +67,10 @@ public class FXMLPurchaseTicketController implements Initializable {
     
     public static void setEdate(Date date){
         edate = date;
+    }
+    
+    public static int getEID(){
+        return eid;
     }
     
     public static int getRowNum(){
@@ -146,6 +155,7 @@ public class FXMLPurchaseTicketController implements Initializable {
         if (goAhead){
             getSeatID();
             getTicketID();
+            FXMLTicketController.setEID(eid);
             FXMLTicketController.setTID(tid);
             FXMLTicketController.setRowNum(rowNum);
             FXMLTicketController.setSeatNum(seatNum);
@@ -153,7 +163,7 @@ public class FXMLPurchaseTicketController implements Initializable {
             FXMLTicketController.setEname(ename);
             FXMLTicketController.setEdate(edate);
             System.out.println(tid);
-            CSC455_DatabaseProject.executeMakeTransaction(tid,FXMLDocumentController.customerID); //executePurchaseTicket(tid, sec, rowNum, seatNum, FXMLDocumentController.customerID); 
+            CSC455_DatabaseProject.executePurchaseTicket(tid, sec, rowNum, seatNum, FXMLDocumentController.customerID); //.executeMakeTransaction(tid,FXMLDocumentController.customerID); //
             ((Node) e.getSource()).getScene().getWindow().hide();
             URL url = getClass().getResource("FXMLTicket.fxml");
             if (url == null){

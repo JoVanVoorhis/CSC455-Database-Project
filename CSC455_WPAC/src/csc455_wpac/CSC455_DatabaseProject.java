@@ -7,6 +7,7 @@ package csc455_wpac;
 
 import com.sun.rowset.CachedRowSetImpl;
 import java.sql.*;
+import java.sql.PreparedStatement;
 import java.sql.Date;
 import java.util.*;
 import java.util.logging.Level;
@@ -101,6 +102,24 @@ public class CSC455_DatabaseProject{
         }
     }
     
+    public static void executePreparedStatement(String sqlStmt) throws SQLException, ClassNotFoundException, Exception{
+        PreparedStatement stmt = null;
+        Connection conn = establish_connection();
+        try{
+            stmt = conn.prepareStatement("select " + sqlStmt);
+            stmt.execute();
+        } catch (SQLException e){
+            System.out.println("Error occured while executing the query " + sqlStmt);
+            throw e;
+        }
+        finally{
+            if(stmt != null){
+                stmt.close();
+            }
+            disconnect_connection(conn);
+        }
+    }
+    
     @SuppressWarnings("null")
     public static ResultSet getResult(String sqlQuery) throws SQLException, Exception {
         Statement stmt = null;
@@ -146,6 +165,52 @@ public class CSC455_DatabaseProject{
             disconnect_connection(conn);
         }
     }
+    
+    /*
+    * Start Prepared Statements with no Result Sets
+    */ 
+    
+    public static void executeDeleteEvent(int id) throws SQLException, Exception{
+        Connection conn = establish_connection();
+        PreparedStatement prepared = null;
+        try{
+            prepared = conn.prepareStatement("DELETE FROM Event WHERE EVENT_ID = ?;");
+            prepared.setInt(1, id);
+            prepared.execute();
+        } catch(SQLException ex){
+            System.out.println("Error occured while deleting event.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            if (prepared != null){
+                prepared.close();
+            }
+            disconnect_connection(conn);
+        }
+    }
+    
+    public static void executeChangeEventDate(Date date, int event) throws SQLException, Exception{
+        Connection conn = establish_connection();
+        PreparedStatement prepared = null;
+        try{
+            prepared = conn.prepareStatement("UPDATE Event SET EDATE = ? WHERE EVENT_ID = ?;");//select changeEventDate(?,?)");//
+            prepared.setDate(1, date);
+            prepared.setInt(2, event);
+            prepared.execute();
+        } catch(SQLException ex){
+            System.out.println("Error occured while changing event date.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            if (prepared != null){
+                prepared.close();
+            }
+            disconnect_connection(conn);
+        }
+    }
+    
+    /*
+    * End Prepared Statements with no Result Set
+    */
+    
         
     public static int executeSecPrice(int eid, String sec) throws SQLException, Exception{
         Connection conn = establish_connection();
@@ -158,6 +223,7 @@ public class CSC455_DatabaseProject{
             call.setString(3, sec);
             call.execute();
             output = call.getInt(1);
+            System.out.println("Price "+ output);
         } catch (SQLException ex) {
             System.out.println("Error occured while getting section price.");
             Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
@@ -170,14 +236,35 @@ public class CSC455_DatabaseProject{
         return output;
     }
     
+    
     public static void executeCreateEvent(String eName, Date eDate) throws Exception{
         Connection conn = establish_connection();
         try (CallableStatement call = conn.prepareCall("{call createEvent(?,?)}")) {
             call.setString(1, eName);
-            call.setDate(1, eDate);
+            call.setDate(2, eDate);
             call.execute();
         } catch (SQLException ex) {
             System.out.println("Error occured while deleting customer.");
+            Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            disconnect_connection(conn);
+        }
+    }
+    
+    public static void executeUpdatePrices(int id, float price1, float price2, float price3, float price4, float price5, float price6, float price7) throws Exception{
+        Connection conn = establish_connection();
+        try (CallableStatement call = conn.prepareCall("{call updatePrices(?,?,?,?,?,?,?,?)}")) {
+            call.setInt(1, id);
+            call.setFloat(2, price1);
+            call.setFloat(3, price2);
+            call.setFloat(4, price3);
+            call.setFloat(5, price4);
+            call.setFloat(6, price5);
+            call.setFloat(7, price6);
+            call.setFloat(8, price7);
+            call.execute();
+        } catch (SQLException ex) {
+            System.out.println("Error occured while updating prices.");
             Logger.getLogger(CSC455_DatabaseProject.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             disconnect_connection(conn);

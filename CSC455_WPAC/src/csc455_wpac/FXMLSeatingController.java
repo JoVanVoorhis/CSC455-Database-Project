@@ -175,7 +175,7 @@ public class FXMLSeatingController implements Initializable {
     private void setAvailableSeats(int currentRow) throws SQLException, Exception{
         String getSeats = "SEAT_NUMBER";
         String specifySection = " and SEC_ID = '" + section + "' and ROW_ID = " + currentRow + ";";
-        ResultSet availableRows = getRowAvailability(eid, getSeats, specifySection); // This needs to be changed to a stored event id value.
+        ResultSet availableRows = getRowAvailability(eid, getSeats, specifySection);
         ResultSetMetaData md = availableRows.getMetaData();
         int columns = md.getColumnCount();
         selectSeatList.clear();
@@ -225,7 +225,7 @@ public class FXMLSeatingController implements Initializable {
         String query = "SELECT ENAME, EDATE from Event where EVENT_ID = " + Integer.toString(eid) + ";";
         ResultSet eventSet = null;
         try {
-            eventSet = getResult(query); // this does not get the correct EVENT_ID
+            eventSet = getResult(query);
             ResultSetMetaData md = eventSet.getMetaData();
             int columns = md.getColumnCount();
             while (eventSet.next()){

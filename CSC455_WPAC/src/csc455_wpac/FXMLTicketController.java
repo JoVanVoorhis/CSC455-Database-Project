@@ -19,13 +19,17 @@ import javafx.scene.text.*;
  * @author JordanKayleeVanVoorhis
  */
 public class FXMLTicketController implements Initializable {
-    int eid = FXMLDocumentController.customerID;
+    static int eid;
     static int tid;
     static int rowNum;
     static int seatNum;
     static String sec;
     static String ename;
     static Date edate;
+    
+    public static void setEID(int id){
+        eid = id;
+    }
     
     public static void setTID(int id){
         tid = id;
@@ -49,6 +53,10 @@ public class FXMLTicketController implements Initializable {
     
     public static void setEdate(Date date){
         edate = date;
+    }
+    
+    public static int getEID(){
+        return eid;
     }
     
     public static int getTID(){

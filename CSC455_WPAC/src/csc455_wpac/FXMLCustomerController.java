@@ -5,6 +5,7 @@
  */
 package csc455_wpac;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -116,17 +117,17 @@ public class FXMLCustomerController implements Initializable {
     }
     
     @FXML
-    private void ticketPurchaseAction(ActionEvent event){
-        try{
-            ((Node) event.getSource()).getScene().getWindow().hide();
-            //Parent ticket = FXMLLoader.load(getClass().getResource("FXMLDirectTicket.fxml"));
-            Stage stage = new Stage();
-            //stage.setScene(new Scene(ticket));
-            stage.show();
-        }catch (Exception e){
-            System.out.println("Cannot load the direct ticket window.");
-            Logger.getLogger(CSC455_WPAC.class.getName()).log(Level.SEVERE, null, e);
+    private void ticketPurchaseAction(ActionEvent event) throws IOException{
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        URL url = getClass().getResource("FXMLPurchaseTicketDirectly.fxml");
+        if (url == null){
+            System.out.println("Could not return to login.");
         }
+        Parent root = FXMLLoader.load(url);
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
     
     @FXML
