@@ -121,7 +121,7 @@ public class FXMLCustomerController implements Initializable {
         ((Node) event.getSource()).getScene().getWindow().hide();
         URL url = getClass().getResource("FXMLPurchaseTicketDirectly.fxml");
         if (url == null){
-            System.out.println("Could not return to login.");
+            System.out.println("Could not purchase ticket directly.");
         }
         Parent root = FXMLLoader.load(url);
         Stage stage = new Stage();

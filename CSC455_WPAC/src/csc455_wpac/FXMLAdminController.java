@@ -318,7 +318,7 @@ public class FXMLAdminController implements Initializable {
     @FXML
     private void confirmButtonAction(ActionEvent event) throws Exception{
         if (eventIDField.getText() != null && !eventIDField.getText().trim().isEmpty()){
-            String eventName = null;
+            String en = null;
             eventID = Integer.valueOf(eventIDField.getText());
             ResultSet result = getResult("SELECT EVENT_ID, ENAME from Event");
             ResultSetMetaData md = result.getMetaData();
@@ -327,14 +327,14 @@ public class FXMLAdminController implements Initializable {
                 for (int i = 1; i <= columns; i++){
                     if (i == 1 && result.getInt(i) == eventID){
                         invalidEventID.setVisible(false);
-                        eventName = result.getString(2);
+                        en = result.getString(2);
                         break;
                     }
                 }
             }
-            if (eventName != null){
+            if (en != null){
                 areYouSure.setVisible(true);
-                eventTitle.setText(eventName + "?");
+                eventTitle.setText(en + "?");
                 eventTitle.setVisible(true);
             }
             else{

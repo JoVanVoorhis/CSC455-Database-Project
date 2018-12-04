@@ -127,12 +127,13 @@ public class FXMLPurchaseTicketController implements Initializable {
     
     @FXML
     private void getSeatID() throws Exception{
-        ResultSet result = getResult("SELECT SEAT_ID from Seat where SEC_ID = '" + sec + "' and ROW_ID = " + rowNum + " and SEAT_NUMBER = " + seatNum + ";");
+        ResultSet result = getResult("SELECT SEAT_ID from Seat WHERE SEC_ID = '" + sec + "' AND ROW_ID = " + rowNum + " AND SEAT_NUMBER = " + seatNum + ";");
         ResultSetMetaData md = result.getMetaData();
         int columns = md.getColumnCount();
         while (result.next()){
             for (int i = 1; i <= columns; i++){
                 sid = result.getInt(i);
+                System.out.println(sid);
             }
         }
     }
@@ -145,6 +146,7 @@ public class FXMLPurchaseTicketController implements Initializable {
         while (result.next()){
             for (int i = 1; i <= columns; i++){
                 tid = result.getInt(i);
+                System.out.println(tid);
             }
         }
     }

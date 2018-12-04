@@ -2,6 +2,17 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLTicket.fxml</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLTicketController.java</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/CSC455_WPAC.java</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLAdminController.java</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/CSC455_DatabaseProject.java</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLAdmin.fxml</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLPurchaseTicketDirectlyController.java</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLPurchaseTicketController.java</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLPurchaseTicketDirectly.fxml</file>
+            <file>file:/Users/JordanKayleeVanVoorhis/Documents/CSC455/CSC455-Database-Project/CSC455_WPAC/src/csc455_wpac/FXMLCustomerController.java</file>
+        </group>
     </open-files>
 </project-private>

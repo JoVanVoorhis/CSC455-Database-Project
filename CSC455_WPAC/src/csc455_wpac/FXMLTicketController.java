@@ -103,7 +103,7 @@ public class FXMLTicketController implements Initializable {
     
     @FXML
     private void printTicket(){
-        barCode.setText(String.valueOf(eid) + String.valueOf(tid));
+        barCode.setText(String.valueOf(eid) + "" + String.valueOf(tid));
         show.setText(ename);
         date.setText(edate.toLocalDate().format(DateTimeFormatter.ofPattern("MMM d, uuuu")));
         section.setText(sec);
